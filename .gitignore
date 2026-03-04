@@ -1,0 +1,107 @@
+# ===============================
+# Unity generated folders (any depth)
+# ===============================
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+*.log
+
+# ===============================
+# Large generated data
+# ===============================
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+
+# ===============================
+# Blender temp files
+# ===============================
+*.blend1
+*.blend1.meta
+
+# ===============================
+# Rider / JetBrains
+# ===============================
+**/[Aa]ssets/Plugins/Editor/JetBrains*
+*.DotSettings.user
+
+# ===============================
+# IDE / Editors
+# ===============================
+.vs/
+.gradle/
+.consulo/
+.idea/
+.vscode/
+
+# ===============================
+# Unity solution & project files
+# ===============================
+ExportedObj/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity meta crash leftovers
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# ===============================
+# Crash files
+# ===============================
+sysinfo.txt
+mono_crash.*
+
+# ===============================
+# Builds / exports
+# ===============================
+*.apk
+*.aab
+*.unitypackage
+*.unitypackage.meta
+*.app
+
+# ===============================
+# Crashlytics
+# ===============================
+crashlytics-build.properties
+
+# ===============================
+# Addressables
+# ===============================
+**/ServerData
+**/[Aa]ssets/StreamingAssets/aa*
+**/[Aa]ssets/AddressableAssetsData/link.xml*
+**/[Aa]ssets/Addressables_Temp*
+**/[Aa]ssets/AddressableAssetsData/*/*.bin*
+
+# ===============================
+# Visual Scripting generated
+# ===============================
+**/[Aa]ssets/Unity.VisualScripting.Generated/
+
+# ===============================
+# Auto-generated test scenes
+# ===============================
+**/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
