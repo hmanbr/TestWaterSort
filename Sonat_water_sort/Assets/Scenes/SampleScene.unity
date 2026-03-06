@@ -477,121 +477,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f564667e8d02244abc4d7805476166e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BottleController
-  bottleColors:
-  - {r: 0.91194963, g: 0.16919816, b: 0.16919816, a: 0}
-  - {r: 0.23264988, g: 0.9496855, b: 0.16425362, a: 0}
-  - {r: 0.13521993, g: 0.74953836, b: 1, a: 0}
-  - {r: 0.8533158, g: 0.20220712, b: 0.9056604, a: 0}
-  bottleMaskSR: {fileID: 88145147}
-  timeToRotate: 1
-  scaleAndRotationMultiplierCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -0.007142857
-      outSlope: -0.007142857
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 35
-      value: 0.75
-      inSlope: -0.007142857
-      outSlope: -0.007142857
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  fillAmountCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.34
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 30
-      value: 0.34
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 54
-      value: 0.13
-      inSlope: -0.65985626
-      outSlope: -0.65985626
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 71
-      value: -0.08
-      inSlope: -0.66665834
-      outSlope: -0.66665834
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 83
-      value: -0.29
-      inSlope: -0.6660596
-      outSlope: -0.6660596
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 89.87142
-      value: -0.75
-      inSlope: -0.65407693
-      outSlope: -0.65407693
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  rotationSpeedMultiplier:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 90
-      value: 0.2
-      inSlope: -0.030585308
-      outSlope: -0.030585308
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.022142876
-      outWeight: 0.33333334
-    m_PreInfinity: 0
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  bottle: {fileID: 1091498303}
+  bottleRenderer: {fileID: 88145147}
+  pourDuration: 0.4
 --- !u!1 &1342569193
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,13 +505,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342569193}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.006802774, w: 0.9999769}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1091498303}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.78}
 --- !u!212 &1342569195
 SpriteRenderer:
   serializedVersion: 2
