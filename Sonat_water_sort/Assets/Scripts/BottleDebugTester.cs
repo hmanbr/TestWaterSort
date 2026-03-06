@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Unity.VisualScripting.Member;
+using static UnityEngine.GraphicsBuffer;
 
 public class BottleDebugTester : MonoBehaviour
 {
@@ -7,6 +9,27 @@ public class BottleDebugTester : MonoBehaviour
 
     int selectedIndex = -1;
     int targetIndex = -1;
+    void Start()
+    {
+        foreach (var bottle in bottles)
+        {
+            bottle.OnPourComplete += Bottle_OnPourComplete; ;
+            bottle.OnBottleComplete += Bottle_OnBottleComplete;
+        }
+    }
+
+    private void Bottle_OnBottleComplete(Bottle source)
+    {
+        Debug.Log($"Bottle completed, colors: {source.GetCurrentColorsInBottle()}");
+    }
+
+    private void Bottle_OnPourComplete(Bottle source, Bottle target)
+    {
+        Debug.Log($"Pour {System.Array.IndexOf(bottles, source) + 1} -> {System.Array.IndexOf(bottles, target) + 1}");
+
+        Debug.Log($"Bottle num {System.Array.IndexOf(bottles, source) + 1} colors: {source.GetCurrentColorsInBottle()}");
+        Debug.Log($"Bottle num {System.Array.IndexOf(bottles, target) + 1} colors: {target.GetCurrentColorsInBottle()}");
+    }
 
     void Update()
     {
@@ -40,10 +63,6 @@ public class BottleDebugTester : MonoBehaviour
         if (selectedIndex == -1 || targetIndex == -1) return;
 
         bottles[selectedIndex].PourTo(bottles[targetIndex]);
-
-        Debug.Log($"Pour {selectedIndex + 1} -> {targetIndex + 1}");
-        Debug.Log($"Bottle num {selectedIndex + 1} colors: {bottles[selectedIndex].GetCurrentColorsInBottle()} ");
-        Debug.Log($"Bottle num {targetIndex + 1} colors: {bottles[targetIndex].GetCurrentColorsInBottle()} ");
 
         selectedIndex = -1;
         targetIndex = -1;

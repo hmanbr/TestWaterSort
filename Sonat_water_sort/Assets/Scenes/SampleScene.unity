@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: colors.Array.data[0].b
@@ -614,7 +614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: colors.Array.data[0].b
@@ -669,24 +669,36 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: 'setColors.Array.data[2]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: 'setColors.Array.data[3]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[0].b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[0].g
-      value: 0.60784316
+      value: 0.6214083
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[0].r
-      value: 0
+      value: 0.03459108
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[1].b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[1].g
-      value: 0.60784316
+      value: 0.12546036
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: setColors.Array.data[1].r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[2].b
@@ -774,7 +786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: colors.Array.data[0].b
@@ -819,6 +831,14 @@ PrefabInstance:
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: colors.Array.data[3].r
       value: 0.9764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: 'setColors.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: 'setColors.Array.data[3]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[0].r
@@ -902,7 +922,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: colors.Array.data[0].b
@@ -955,6 +975,10 @@ PrefabInstance:
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: 'setColors.Array.data[1]'
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+      propertyPath: 'setColors.Array.data[3]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2615374043104177922, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
       propertyPath: setColors.Array.data[0].b
