@@ -42,12 +42,6 @@ public class InputManager : MonoBehaviour
             {
                 gameManager.HandleBottleSelected(bottle);
             }
-
-            DebugDotweenDoMove stupidFuckingDotweenDoMove = hit.collider.GetComponent<DebugDotweenDoMove>();
-            if (stupidFuckingDotweenDoMove != null)
-            {
-                stupidFuckingDotweenDoMove.PourTo();
-            }
         }
     }  
 }

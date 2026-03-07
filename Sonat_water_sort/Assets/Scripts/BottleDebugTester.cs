@@ -13,7 +13,7 @@ public class BottleDebugTester : MonoBehaviour
     {
         foreach (var bottle in bottles)
         {
-            bottle.OnPourComplete += Bottle_OnPourComplete; ;
+            bottle.OnPourComplete += Bottle_OnPourComplete;
             bottle.OnBottleComplete += Bottle_OnBottleComplete;
         }
     }
@@ -23,7 +23,7 @@ public class BottleDebugTester : MonoBehaviour
         Debug.Log($"Bottle completed, colors: {source.GetCurrentColorsInBottle()}");
     }
 
-    private void Bottle_OnPourComplete(Bottle source, Bottle target)
+    private void Bottle_OnPourComplete(Bottle source, Bottle target, bool success)
     {
         Debug.Log($"Pour {System.Array.IndexOf(bottles, source) + 1} -> {System.Array.IndexOf(bottles, target) + 1}");
 

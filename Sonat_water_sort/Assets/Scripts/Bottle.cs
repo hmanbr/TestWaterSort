@@ -9,7 +9,7 @@ using UnityEngine;
 public class Bottle : MonoBehaviour
 {
     // Events
-    public event Action<Bottle, Bottle> OnPourComplete;
+    public event Action<Bottle, Bottle, bool> OnPourComplete;
     public event Action<Bottle> OnBottleComplete;
 
     [SerializeField] Transform bottleTransform;
@@ -85,7 +85,7 @@ public class Bottle : MonoBehaviour
 
     private void Start()
     {
-        InitializeFromPalette(setColors);
+
     }
 
     // Set bottle's color
@@ -199,21 +199,42 @@ public class Bottle : MonoBehaviour
 
     public void PourTo(Bottle target)
     {
-        if (isAnimating) return;
-        if (currentColorsList.Count == 0) return;
-        if (isComplete) return;
-        if (target.isComplete) return;
+        if (isAnimating)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        if (currentColorsList.Count == 0)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        if (isComplete || target.isComplete)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
 
         int topColorIndex = GetTopColor();
 
         int sameColorCount = GetTopColorCount();
         int targetSpace = k_bottleCapacity - target.currentColorsList.Count;
 
-        if (!target.CanReceiveThisColor(topColorIndex)) return;
+        if (!target.CanReceiveThisColor(topColorIndex))
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
 
         // determining how much water need to be pour
         int amount = Mathf.Min(sameColorCount, targetSpace);
-        if (amount <= 0) return;
+        if (amount <= 0)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
 
         isAnimating = true;
 
@@ -237,6 +258,7 @@ public class Bottle : MonoBehaviour
         float targetBottleTargetFill = (target.currentColorsList.Count + amount) / (float)k_bottleCapacity;
 
         //Vector3 targetPourPosition = target.GetBottleMouthTransform().position;
+        //targetPourPosition = new Vector3(targetPourPosition.x + (pourHorizontalOffset * direction), targetPourPosition.y, targetPourPosition.z);
         Vector3 targetPourPosition = new Vector3(target.bottleTransform.position.x + (pourHorizontalOffset * direction), target.bottleTransform.position.y + pourHeightOffset, bottleTransform.position.z);
 
         if (selectTween != null && selectTween.IsActive())
@@ -349,16 +371,8 @@ public class Bottle : MonoBehaviour
         sequence.OnComplete(() =>
         {
             isAnimating = false;
-            OnPourComplete?.Invoke(this, target);
+            OnPourComplete?.Invoke(this, target, true);
         });
-    }
-
-    public void CancelSelect()
-    {
-        if (selectTween != null && selectTween.IsActive())
-            selectTween.Kill();
-
-        bottleTransform.DOMoveY(originalPosition.y, 0.15f);
     }
 
     public void AnimateSelect()

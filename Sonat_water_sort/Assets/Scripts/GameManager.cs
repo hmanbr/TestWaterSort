@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
 
         isPouring = true;
 
-        sourceBottle.CancelSelect(); // optional if you have this
         sourceBottle.PourTo(targetBottle);
 
         ClearSelection();
@@ -52,8 +51,6 @@ public class GameManager : MonoBehaviour
 
     private void ClearSelection()
     {
-        //sourceBottle.AnimateDeselect();
-
         sourceBottle = null;
         targetBottle = null;
     }
@@ -79,9 +76,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Bottle_OnPourComplete(Bottle arg1, Bottle arg2)
+    private void Bottle_OnPourComplete(Bottle source, Bottle target, bool success)
     {
         isPouring = false;
+        Debug.Log("THIS SHIT LASED: " + isPouring);
     }
 
     void OnDisable()

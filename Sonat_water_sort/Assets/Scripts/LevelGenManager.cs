@@ -22,53 +22,36 @@ public class LevelGenManager : MonoBehaviour
 
     private void Start()
     {
-        SpawnBottles();
+        SpawnLevel();
+        //DebugPrintBottleColors();
     }
 
-    public void SpawnBottles()
+    public void DebugPrintBottleColors()
+    {
+        if (allBottles == null || allBottles.Count == 0)
+        {
+            Debug.Log("No bottles found.");
+            return;
+        }
+
+        for (int i = 0; i < allBottles.Count; i++)
+        {
+            Bottle bottle = allBottles[i];
+
+            string colors = bottle.GetCurrentColorsInBottle();
+
+            Debug.Log($"Bottle {i}: {colors}");
+        }
+    }
+
+
+    public void SpawnLevel()
     {
         allBottles.Clear();
 
-        int totalBottles = rows * columns;
-        int playableBottles = totalBottles - 1;
-        int slotsPerBottle = 4;
+        int bottleCount = rows * columns;
 
-        List<int> colorPool = new List<int>();
-
-        // create color pool (each color fills one bottle)
-        for (int i = 0; i < colorAmount; i++)
-        {
-            for (int j = 0; j < slotsPerBottle; j++)
-            {
-                colorPool.Add(i);
-            }
-        }
-
-        // if more bottles than colors, fill remaining with additional colors
-        int remainingBottles = playableBottles - colorAmount;
-        int nextColorIndex = colorAmount;
-
-        for (int i = 0; i < remainingBottles; i++)
-        {
-            int colorIndex = nextColorIndex % palette.Count;
-
-            for (int j = 0; j < slotsPerBottle; j++)
-            {
-                colorPool.Add(colorIndex);
-            }
-
-            nextColorIndex++;
-        }
-
-        // shuffle colors
-        for (int i = 0; i < colorPool.Count; i++)
-        {
-            int rand = Random.Range(i, colorPool.Count);
-            (colorPool[i], colorPool[rand]) = (colorPool[rand], colorPool[i]);
-        }
-
-        int poolIndex = 0;
-
+        // spawn bottles
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < columns; x++)
@@ -86,27 +69,70 @@ public class LevelGenManager : MonoBehaviour
                 Bottle bottle = bottleObj.GetComponent<Bottle>();
 
                 if (bottle != null)
-                {
                     allBottles.Add(bottle);
-
-                    int[] colors = new int[4];
-
-                    if (allBottles.Count == totalBottles) // last bottle = empty
-                    {
-                        colors = new int[] { -1, -1, -1, -1 };
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 4; i++)
-                        {
-                            colors[i] = colorPool[poolIndex++];
-                        }
-                    }
-
-                    bottle.InitializeFromPalette(colors);
-                }
             }
         }
+
+        GenerateBottleColors(bottleCount);
         gameManager.SetBottles(allBottles);
+    }
+
+    void GenerateBottleColors(int bottleCount)
+    {
+        const int bottleCapacity = 4;
+
+        // Usually water sort has 1–2 empty bottles
+        int emptyBottleCount = 2;
+        int filledBottleCount = bottleCount - emptyBottleCount;
+
+        int totalColorUnits = filledBottleCount * bottleCapacity;
+
+        List<int> colorPool = new List<int>(totalColorUnits);
+
+        // pick colors from palette
+        for (int i = 0; i < filledBottleCount; i++)
+        {
+            int colorIndex = i % palette.Count;
+
+            for (int j = 0; j < bottleCapacity; j++)
+            {
+                colorPool.Add(colorIndex);
+            }
+        }
+
+        Shuffle(colorPool);
+
+        int poolIndex = 0;
+
+        for (int i = 0; i < allBottles.Count; i++)
+        {
+            int[] colors = new int[bottleCapacity];
+
+            if (i < filledBottleCount)
+            {
+                for (int j = 0; j < bottleCapacity; j++)
+                {
+                    colors[j] = colorPool[poolIndex++];
+                }
+            }
+            else
+            {
+                // empty bottle
+                for (int j = 0; j < bottleCapacity; j++)
+                {
+                    colors[j] = -1;
+                }
+            }
+
+            allBottles[i].InitializeFromPalette(colors);
+        }
+    }
+    void Shuffle(List<int> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rand = Random.Range(0, i + 1);
+            (list[i], list[rand]) = (list[rand], list[i]);
+        }
     }
 }
