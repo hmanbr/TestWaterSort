@@ -20,12 +20,16 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties: _SurfaceTex
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfaceTex:
+        m_Texture: {fileID: 2800000, guid: 51119d3876d984a4dbb0057828d06ab8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -47,13 +51,17 @@ Material:
     - _HeightMin: -3
     - _HeightRange: 6
     - _LayerCount: 4
+    - _LayerCurveStrength: 0.26
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ScaleAndRotationMultiplier: 1
     - _SurfaceBrightness: 1.74
     - _SurfaceDepthStrength: 1
+    - _SurfaceStrength: 1
     - _SurfaceThickness: 0.1
     - _WaterSurfaceSize: 1.3
+    - _bruh: 0
+    - _gya: -1.24
     m_Colors:
     - _Color01: {r: 0.8742138, g: 0.07972381, b: 0.07972381, a: 1}
     - _Color02: {r: 0.21953231, g: 0.60277164, b: 0.9308176, a: 1}
