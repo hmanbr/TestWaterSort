@@ -12,7 +12,7 @@ public class ColorPaletteSO : ScriptableObject
         if (index < 0 || index >= colorsPalette.Length)
         {
             Debug.LogError($"Color index {index} out of range.");
-            return Color.magenta;
+            return Color.white;
         }
 
         return colorsPalette[index];

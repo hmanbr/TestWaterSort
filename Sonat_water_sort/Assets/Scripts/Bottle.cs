@@ -1,12 +1,10 @@
 using DG.Tweening;
+using DG.Tweening.Core.Easing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static GameEnums;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEditor.Experimental.GraphView.Port;
-using static UnityEngine.Rendering.DebugUI;
+
 
 public class Bottle : MonoBehaviour
 {
@@ -20,7 +18,8 @@ public class Bottle : MonoBehaviour
     [SerializeField] ColorPaletteSO palette;
     [SerializeField] int[] setColors;
 
-    [SerializeField] float pourDuration = 0.4f;
+    [SerializeField] float pourDuration = 3.5f;
+    [SerializeField] float waterFillAndDrainDuration = 0.6f;
 
     const int k_bottleCapacity = 4;
 
@@ -43,8 +42,32 @@ public class Bottle : MonoBehaviour
 
     public bool isComplete { get; private set; }
 
+    // select source bottle tween (Pop bottle up)
+    [SerializeField] float selectOffsetY = 0.4f;
+    [SerializeField] float selectDuration = 0.2f;
+
+    private Vector3 originalLocalPosition;
+    private Tween selectTween;
+
+    // source bottle move above target bottle, then pour
+    [SerializeField] float pourHeightOffset = 5f;
+    [SerializeField] float pourHorizontalOffset = 0.35f;
+    [SerializeField] float moveDuration = 0.25f;
+
+    private Vector3 originalPosition;
+
+    [SerializeField] private Transform bottleMouthTransform;
+
+    public Transform GetBottleMouthTransform()
+    {
+        return bottleMouthTransform;
+    }
+
     void Awake()
     {
+        originalLocalPosition = bottleTransform.localPosition;
+        originalPosition = bottleTransform.position;
+
         // Get shader graph varibles
         materialPropertyblock = new MaterialPropertyBlock();
 
@@ -194,7 +217,13 @@ public class Bottle : MonoBehaviour
 
         isAnimating = true;
 
+        // rotate left or right (base on if target is left or right)
         float angle = GetPourAngleFromAmount(amount);
+
+        // determine rotation direction based on target position
+        float direction = target.bottleTransform.position.x < bottleTransform.position.x ? 1f : -1f;
+        angle = angle * direction;
+
         float multiplierTarget = GetScaleAndRotationMultiplierFromAmount(amount);
 
         // prepare target color visually
@@ -207,12 +236,26 @@ public class Bottle : MonoBehaviour
         float targetBottleStartFill = target.currentFillAmount;
         float targetBottleTargetFill = (target.currentColorsList.Count + amount) / (float)k_bottleCapacity;
 
+        //Vector3 targetPourPosition = target.GetBottleMouthTransform().position;
+        Vector3 targetPourPosition = new Vector3(target.bottleTransform.position.x + (pourHorizontalOffset * direction), target.bottleTransform.position.y + pourHeightOffset, bottleTransform.position.z);
+
+        if (selectTween != null && selectTween.IsActive())
+        {
+            selectTween.Kill();
+        }
+
         Sequence sequence = DOTween.Sequence();
+
+        // move source bottle above target bottle
+        sequence.Append(
+            bottleTransform.DOMove(targetPourPosition, moveDuration)
+                .SetEase(Ease.OutQuad)
+        );
 
         // rotate bottle
         sequence.Append(
             bottleTransform
-            .DORotate(new Vector3(0, 0, angle), 0.35f)
+            .DORotate(new Vector3(0, 0, angle), pourDuration)
             .SetEase(Ease.OutQuad)
         );
 
@@ -226,7 +269,7 @@ public class Bottle : MonoBehaviour
                     UpdateShader();
                 },
                 multiplierTarget,
-                0.35f
+                pourDuration
             )
         );
 
@@ -243,7 +286,7 @@ public class Bottle : MonoBehaviour
                     bottleRenderer.SetPropertyBlock(materialPropertyblock);
                 },
                 sourceBottleTargetFill,
-                0.6f
+                waterFillAndDrainDuration
             ).SetEase(Ease.InOutSine)
         );
 
@@ -260,7 +303,7 @@ public class Bottle : MonoBehaviour
                     target.bottleRenderer.SetPropertyBlock(target.materialPropertyblock);
                 },
                 targetBottleTargetFill,
-                0.6f
+                waterFillAndDrainDuration
             ).SetEase(Ease.InOutSine)
         );
 
@@ -277,10 +320,16 @@ public class Bottle : MonoBehaviour
             target.UpdateShader();
         });
 
+        // move bottle back to orginal position
+        sequence.Append(
+             bottleTransform.DOMove(originalPosition, moveDuration)
+                 .SetEase(Ease.InOutQuad)
+        );
+
         // rotate bottle back
         sequence.Append(
             bottleTransform
-            .DORotate(Vector3.zero, 0.35f)
+            .DORotate(Vector3.zero, pourDuration)
             .SetEase(Ease.InOutQuad)
         );
 
@@ -293,16 +342,45 @@ public class Bottle : MonoBehaviour
                     UpdateShader();
                 },
                 1f,
-                0.35f
+                pourDuration
             )
         );
 
         sequence.OnComplete(() =>
         {
             isAnimating = false;
-
             OnPourComplete?.Invoke(this, target);
         });
+    }
+
+    public void CancelSelect()
+    {
+        if (selectTween != null && selectTween.IsActive())
+            selectTween.Kill();
+
+        bottleTransform.DOMoveY(originalPosition.y, 0.15f);
+    }
+
+    public void AnimateSelect()
+    {
+        if (selectTween != null && selectTween.IsActive())
+            selectTween.Kill();
+
+        selectTween = bottleTransform.DOLocalMoveY(
+            originalLocalPosition.y + selectOffsetY,
+            selectDuration
+        ).SetEase(Ease.OutQuad);
+    }
+
+    public void AnimateDeselect()
+    {
+        if (selectTween != null && selectTween.IsActive())
+            selectTween.Kill();
+
+        selectTween = bottleTransform.DOLocalMoveY(
+            originalLocalPosition.y,
+            selectDuration
+        ).SetEase(Ease.OutQuad);
     }
 
     void PrepareIncomingColor(int colorIndex, int amount)

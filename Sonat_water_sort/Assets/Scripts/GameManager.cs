@@ -3,50 +3,93 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Grid")]
-    [SerializeField] private Grid grid;
-
-    [Header("Bottle Setup")]
-    [SerializeField] private GameObject bottlePrefab;
-    [SerializeField] private int columns = 5;
-    [SerializeField] private int rows = 2;
+    private Bottle sourceBottle;
+    private Bottle targetBottle;
 
     private List<Bottle> allBottles = new List<Bottle>();
 
+    private bool isPouring = false;
+
     void Start()
     {
-        SpawnBottles();
+
     }
 
-    public void SpawnBottles()
+    void AttemptPour()
     {
-        allBottles.Clear();
+        if (sourceBottle == null || targetBottle == null)
+            return;
 
-        for (int y = 0; y < rows; y++)
+        isPouring = true;
+
+        sourceBottle.CancelSelect(); // optional if you have this
+        sourceBottle.PourTo(targetBottle);
+
+        ClearSelection();
+    }
+
+    public void HandleBottleSelected(Bottle bottle)
+    {
+        if (isPouring) return;
+
+        if (sourceBottle == null)
         {
-            for (int x = 0; x < columns; x++)
-            {
-                Vector3Int cellPosition = new Vector3Int(x, y, 0);
-
-                Vector3 worldPosition = grid.GetCellCenterWorld(cellPosition);
-
-                GameObject bottleObj = Instantiate(
-                    bottlePrefab,
-                    worldPosition,
-                    Quaternion.identity,
-                    transform
-                );
-
-                Bottle bottle = bottleObj.GetComponent<Bottle>();
-
-                if (bottle != null)
-                    allBottles.Add(bottle);
-            }
+            sourceBottle = bottle;
+            sourceBottle.AnimateSelect();
+            return;
         }
+
+        targetBottle = bottle;
+
+        if (sourceBottle == targetBottle)
+        {
+            ClearSelection();
+            return;
+        }
+
+        AttemptPour();
+    }
+
+    private void ClearSelection()
+    {
+        //sourceBottle.AnimateDeselect();
+
+        sourceBottle = null;
+        targetBottle = null;
+    }
+
+    public bool HasSourceBottle()
+    {
+        return sourceBottle != null;
     }
 
     public List<Bottle> GetBottles()
     {
         return allBottles;
+    }
+
+    public void SetBottles(List<Bottle> bottles)
+    {
+        allBottles.Clear();
+        allBottles.AddRange(bottles);
+
+        foreach (var bottle in allBottles)
+        {
+            bottle.OnPourComplete += Bottle_OnPourComplete;
+        }
+    }
+
+    private void Bottle_OnPourComplete(Bottle arg1, Bottle arg2)
+    {
+        isPouring = false;
+    }
+
+    void OnDisable()
+    {
+        foreach (var bottle in allBottles)
+        {
+            if (bottle != null)
+                bottle.OnPourComplete -= Bottle_OnPourComplete;
+        }
     }
 }
