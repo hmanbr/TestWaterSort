@@ -46,6 +46,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _EllipseHeightScale: 3
     - _FillAmount: 1
     - _HeightMax: 3
     - _HeightMin: -3
@@ -55,8 +56,10 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ScaleAndRotationMultiplier: 1
+    - _SurfaceBandSize: 1.35
     - _SurfaceBrightness: 1.74
     - _SurfaceDepthStrength: 1
+    - _SurfaceHighlight: 1.05
     - _SurfaceStrength: 1
     - _SurfaceThickness: 0.1
     - _WaterSurfaceSize: 1.3
