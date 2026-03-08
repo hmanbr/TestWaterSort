@@ -10,9 +10,31 @@ public class GameManager : MonoBehaviour
 
     private bool isPouring = false;
 
+    [Header("Grid")]
+    [SerializeField] private Grid grid;
+
     void Start()
     {
+        //Debuging purpose
+        GetAllBottles();
+        foreach (var bottle in allBottles)
+        {
+            bottle.OnPourComplete += Bottle_OnPourComplete;
+        }
+        //Debuging purpose
+    }
+    private void GetAllBottles()
+    {
+        allBottles.Clear();
 
+        foreach (Transform child in grid.transform)
+        {
+            Bottle bottle = child.GetComponent<Bottle>();
+            if (bottle != null)
+            {
+                allBottles.Add(bottle);
+            }
+        }
     }
 
     void AttemptPour()
@@ -22,8 +44,7 @@ public class GameManager : MonoBehaviour
 
         isPouring = true;
 
-        //sourceBottle.PourTo(targetBottle);
-        sourceBottle.PourTo_Debug(targetBottle);
+        sourceBottle.PourTo(targetBottle);
 
         ClearSelection();
     }
@@ -32,8 +53,12 @@ public class GameManager : MonoBehaviour
     {
         if (isPouring) return;
 
+        // selecting source
         if (sourceBottle == null)
         {
+            if (!bottle.CanBeSourceBottle())
+                return;
+
             sourceBottle = bottle;
             sourceBottle.AnimateSelect();
             return;
@@ -43,6 +68,7 @@ public class GameManager : MonoBehaviour
 
         if (sourceBottle == targetBottle)
         {
+            sourceBottle.AnimateDeselect();
             ClearSelection();
             return;
         }
@@ -80,7 +106,6 @@ public class GameManager : MonoBehaviour
     private void Bottle_OnPourComplete(Bottle source, Bottle target, bool success)
     {
         isPouring = false;
-        Debug.Log("THIS SHIT LASED: " + isPouring);
     }
 
     void OnDisable()

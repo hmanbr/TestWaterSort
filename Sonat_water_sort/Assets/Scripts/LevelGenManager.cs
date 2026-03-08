@@ -85,8 +85,6 @@ public class LevelGenManager : MonoBehaviour
 
     void GenerateColors(int bottleCount)
     {
-        //bottleCount -= 2; //DEBUG ONLY 
-
         const int bottleCapacity = 4;
 
         int paletteCount = palette.Count;
@@ -95,39 +93,35 @@ public class LevelGenManager : MonoBehaviour
         int emptyBottleCount = 2;
         int filledBottleCount = bottleCount - emptyBottleCount;
 
-        int bottlesPerColor = filledBottleCount / colorTypes;
+        int totalLayers = filledBottleCount * bottleCapacity;
 
         bool valid = false;
 
         while (!valid)
         {
-            List<int> colorPool = new List<int>();
+            List<int> colorPool = new List<int>(totalLayers);
 
-            for (int color = 0; color < colorTypes; color++)
+            // create evenly distributed layers
+            for (int i = 0; i < totalLayers; i++)
             {
-                for (int b = 0; b < bottlesPerColor; b++)
-                {
-                    for (int i = 0; i < bottleCapacity; i++)
-                    {
-                        colorPool.Add(color);
-                    }
-                }
+                colorPool.Add(i % colorTypes);
             }
 
             Shuffle(colorPool);
 
-            int index = 0;
             valid = true;
 
+            // ensure no bottle spawns already complete
             for (int i = 0; i < filledBottleCount; i++)
             {
-                int first = colorPool[index];
+                int start = i * bottleCapacity;
 
+                int first = colorPool[start];
                 bool allSame = true;
 
                 for (int j = 1; j < bottleCapacity; j++)
                 {
-                    if (colorPool[index + j] != first)
+                    if (colorPool[start + j] != first)
                     {
                         allSame = false;
                         break;
@@ -139,14 +133,12 @@ public class LevelGenManager : MonoBehaviour
                     valid = false;
                     break;
                 }
-
-                index += bottleCapacity;
             }
 
             if (!valid)
                 continue;
 
-            index = 0;
+            int index = 0;
 
             for (int i = 0; i < allBottles.Count; i++)
             {
