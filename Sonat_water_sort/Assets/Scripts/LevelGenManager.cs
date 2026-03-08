@@ -82,7 +82,9 @@ public class LevelGenManager : MonoBehaviour
         const int bottleCapacity = 4;
 
         // Usually water sort has 1–2 empty bottles
-        int emptyBottleCount = 2;
+        //int emptyBottleCount = 2;
+        int emptyBottleCount = 4; //FOR DEBUG
+
         int filledBottleCount = bottleCount - emptyBottleCount;
 
         int totalColorUnits = filledBottleCount * bottleCapacity;

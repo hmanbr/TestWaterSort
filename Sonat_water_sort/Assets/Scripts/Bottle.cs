@@ -196,6 +196,53 @@ public class Bottle : MonoBehaviour
         }
         return currentColorsList[currentColorsList.Count - 1] == colorIndex;
     }
+    public void PourTo_Debug(Bottle target)
+    {
+        // validation
+        if (currentColorsList.Count == 0)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        if (isComplete || target.isComplete)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        int topColorIndex = GetTopColor();
+
+        if (!target.CanReceiveThisColor(topColorIndex))
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        int sameColorCount = GetTopColorCount();
+        int targetSpace = k_bottleCapacity - target.currentColorsList.Count;
+
+        int amount = Mathf.Min(sameColorCount, targetSpace);
+
+        if (amount <= 0)
+        {
+            OnPourComplete?.Invoke(this, target, false);
+            return;
+        }
+
+        // apply logic immediately
+        for (int i = 0; i < amount; i++)
+        {
+            currentColorsList.RemoveAt(currentColorsList.Count - 1);
+            target.currentColorsList.Add(topColorIndex);
+        }
+
+        // update bottle states
+        UpdateShader();
+        target.UpdateShader();
+
+        OnPourComplete?.Invoke(this, target, true);
+    }
 
     public void PourTo(Bottle target)
     {

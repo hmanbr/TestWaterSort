@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
 
         isPouring = true;
 
-        sourceBottle.PourTo(targetBottle);
+        //sourceBottle.PourTo(targetBottle);
+        sourceBottle.PourTo_Debug(targetBottle);
 
         ClearSelection();
     }

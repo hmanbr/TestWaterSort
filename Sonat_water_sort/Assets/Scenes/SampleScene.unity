@@ -150,9 +150,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenManager
   gameManager: {fileID: 1053565424}
   grid: {fileID: 1567269307}
-  bottlePrefab: {fileID: 7657622789198975532, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
+  bottlePrefab: {fileID: 7657622789198975532, guid: 753ee229581cb0b43bce81b2674d19b4, type: 3}
   columns: 4
-  rows: 2
+  rows: 3
   colorAmount: 2
   palette: {fileID: 11400000, guid: 8a69ceba78b1eb9469b14d877242289a, type: 2}
 --- !u!4 &62165329
@@ -276,7 +276,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
