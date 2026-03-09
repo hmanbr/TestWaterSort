@@ -1,14 +1,10 @@
 using DG.Tweening;
-using DG.Tweening.Core.Easing;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-
 
 public class Bottle : MonoBehaviour
 {
-    // Events
     public event Action<Bottle, Bottle, bool> OnPourComplete;
     public event Action<Bottle> OnBottleComplete;
 
@@ -25,7 +21,7 @@ public class Bottle : MonoBehaviour
 
     List<int> currentColorsList = new List<int>(k_bottleCapacity);
 
-    MaterialPropertyBlock materialPropertyblock;
+    Material bottleMaterial;
 
     int fillAmountID;
     int scaleAndRotationMultiplierID;
@@ -42,21 +38,19 @@ public class Bottle : MonoBehaviour
 
     public bool isComplete { get; private set; }
 
-    // select source bottle tween (Pop bottle up)
     [SerializeField] float selectOffsetY = 0.4f;
     [SerializeField] float selectDuration = 0.2f;
 
-    private Vector3 originalLocalPosition;
-    private Tween selectTween;
+    Vector3 originalLocalPosition;
+    Tween selectTween;
 
-    // source bottle move above target bottle, then pour
     [SerializeField] float pourHeightOffset = 5f;
     [SerializeField] float pourHorizontalOffset = 0.35f;
     [SerializeField] float moveDuration = 0.25f;
 
-    private Vector3 originalPosition;
+    Vector3 originalPosition;
 
-    [SerializeField] private Transform bottleMouthTransform;
+    [SerializeField] Transform bottleMouthTransform;
 
     public Transform GetBottleMouthTransform()
     {
@@ -68,8 +62,7 @@ public class Bottle : MonoBehaviour
         originalLocalPosition = bottleTransform.localPosition;
         originalPosition = bottleTransform.position;
 
-        // Get shader graph varibles
-        materialPropertyblock = new MaterialPropertyBlock();
+        bottleMaterial = bottleRenderer.material;
 
         fillAmountID = Shader.PropertyToID("_FillAmount");
         scaleAndRotationMultiplierID = Shader.PropertyToID("_ScaleAndRotationMultiplier");
@@ -79,26 +72,21 @@ public class Bottle : MonoBehaviour
         color03ID = Shader.PropertyToID("_Color03");
         color04ID = Shader.PropertyToID("_Color04");
 
-        bottleRenderer.GetPropertyBlock(materialPropertyblock);
         UpdateShader();
     }
 
-    private void Start()
+    void Start()
     {
-        InitializeFromPalette(setColors); //for DEBUG, DELETE LATER
+        InitializeFromPalette(setColors);
     }
 
-    // Set bottle's color
     public void InitializeFromPalette(int[] setColors)
     {
         currentColorsList.Clear();
 
         foreach (var id in setColors)
         {
-            if (id < 0) // empty slot
-            {
-                continue;
-            }
+            if (id < 0) continue;
             currentColorsList.Add(id);
         }
 
@@ -107,29 +95,19 @@ public class Bottle : MonoBehaviour
 
     void UpdateShader()
     {
-        bottleRenderer.GetPropertyBlock(materialPropertyblock);
-
         float fill = currentColorsList.Count / (float)k_bottleCapacity;
 
-        materialPropertyblock.SetFloat(fillAmountID, fill);
-        materialPropertyblock.SetFloat(scaleAndRotationMultiplierID, scaleAndRotationMultiplier);
+        bottleMaterial.SetFloat(fillAmountID, fill);
+        bottleMaterial.SetFloat(scaleAndRotationMultiplierID, scaleAndRotationMultiplier);
 
-        materialPropertyblock.SetColor(color01ID, currentColorsList.Count > 0 ? palette.GetColor(currentColorsList[0]) : Color.clear);
-        materialPropertyblock.SetColor(color02ID, currentColorsList.Count > 1 ? palette.GetColor(currentColorsList[1]) : Color.clear);
-        materialPropertyblock.SetColor(color03ID, currentColorsList.Count > 2 ? palette.GetColor(currentColorsList[2]) : Color.clear);
-        materialPropertyblock.SetColor(color04ID, currentColorsList.Count > 3 ? palette.GetColor(currentColorsList[3]) : Color.clear);
-
-        bottleRenderer.SetPropertyBlock(materialPropertyblock);
+        bottleMaterial.SetColor(color01ID, currentColorsList.Count > 0 ? palette.GetColor(currentColorsList[0]) : Color.clear);
+        bottleMaterial.SetColor(color02ID, currentColorsList.Count > 1 ? palette.GetColor(currentColorsList[1]) : Color.clear);
+        bottleMaterial.SetColor(color03ID, currentColorsList.Count > 2 ? palette.GetColor(currentColorsList[2]) : Color.clear);
+        bottleMaterial.SetColor(color04ID, currentColorsList.Count > 3 ? palette.GetColor(currentColorsList[3]) : Color.clear);
 
         currentFillAmount = fill;
 
         UpdateBottleCompletionState();
-
-        //Debug.Log($"{gameObject.name} update shader: {bottleRenderer.GetInstanceID()}");
-        //if(currentColorsList.Count > 0)
-        //{
-        //    Debug.Log("palette color list: " + palette.GetColor(currentColorsList[0]));
-        //}
     }
 
     void UpdateBottleCompletionState()
@@ -153,66 +131,50 @@ public class Bottle : MonoBehaviour
 
         isComplete = true;
         OnBottleComplete?.Invoke(this);
-        Debug.Log("This bottle complete: " + gameObject.name);
-    }
-
-    public int GetTopColorCount()
-    {
-        if (currentColorsList.Count == 0)
-        {
-            return 0;
-        }
-
-        int topColorIndex = currentColorsList[currentColorsList.Count - 1];
-        int count = 0;
-
-        for (int i = currentColorsList.Count - 1; i >= 0; i--)
-        {
-            if (currentColorsList[i] == topColorIndex)
-            {
-                count++;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        return count;
     }
 
     public int GetTopColor()
     {
         if (currentColorsList.Count == 0)
-        {
-            return -1; // indicates no color
-        }
+            return -1;
+
         return currentColorsList[currentColorsList.Count - 1];
+    }
+
+    public int GetTopColorCount()
+    {
+        if (currentColorsList.Count == 0)
+            return 0;
+
+        int topColor = GetTopColor();
+        int count = 0;
+
+        for (int i = currentColorsList.Count - 1; i >= 0; i--)
+        {
+            if (currentColorsList[i] == topColor)
+                count++;
+            else
+                break;
+        }
+
+        return count;
     }
 
     public bool CanReceiveThisColor(int colorIndex)
     {
         if (isComplete) return false;
+        if (currentColorsList.Count == k_bottleCapacity) return false;
 
-        if (currentColorsList.Count == k_bottleCapacity)
-        {
-            return false;
-        }
         if (currentColorsList.Count == 0)
-        {
             return true;
-        }
+
         return currentColorsList[currentColorsList.Count - 1] == colorIndex;
     }
 
     public bool CanBeSourceBottle()
     {
-        if (currentColorsList.Count == 0)
-            return false;
-
-        if (isComplete)
-            return false;
-
+        if (currentColorsList.Count == 0) return false;
+        if (isComplete) return false;
         return true;
     }
 
@@ -236,18 +198,17 @@ public class Bottle : MonoBehaviour
             return;
         }
 
-        int topColorIndex = GetTopColor();
+        int topColor = GetTopColor();
 
         int sameColorCount = GetTopColorCount();
         int targetSpace = k_bottleCapacity - target.currentColorsList.Count;
 
-        if (!target.CanReceiveThisColor(topColorIndex))
+        if (!target.CanReceiveThisColor(topColor))
         {
             FailPourAttempt(target);
             return;
         }
 
-        // determining how much water need to be pour
         int amount = Mathf.Min(sameColorCount, targetSpace);
         if (amount <= 0)
         {
@@ -255,132 +216,93 @@ public class Bottle : MonoBehaviour
             return;
         }
 
-        //DEBUG ONLY
-        Color debugColor = palette.GetColor(topColorIndex);
-        Debug.Log(
-            $"POUR | {name} -> {target.name} | " +
-            $"ColorIndex: {topColorIndex} | " +
-            $"Color: {debugColor} | " +
-            $"Amount: {amount} | " +
-            $"SourceStack: {currentColorsList.Count} | " +
-            $"TargetStack: {target.currentColorsList.Count}"
-        );
-
         isAnimating = true;
 
-        // rotate left or right (base on if target is left or right)
         float angle = GetPourAngleFromAmount(amount);
-
-        // determine rotation direction based on target position
         float direction = target.bottleTransform.position.x < bottleTransform.position.x ? 1f : -1f;
-        angle = angle * direction;
+        angle *= direction;
 
         float multiplierTarget = GetScaleAndRotationMultiplierFromAmount(amount);
 
-        // prepare target color visually
-        target.PrepareIncomingColor(topColorIndex, amount);
+        target.PrepareIncomingColor(topColor, amount);
 
-        // calculate target fill WITHOUT modifying list
-        float sourceBottleStartFill = currentFillAmount;
-        float sourceBottleTargetFill = (currentColorsList.Count - amount) / (float)k_bottleCapacity;
+        float sourceTargetFill = (currentColorsList.Count - amount) / (float)k_bottleCapacity;
+        float targetTargetFill = (target.currentColorsList.Count + amount) / (float)k_bottleCapacity;
 
-        float targetBottleStartFill = target.currentFillAmount;
-        float targetBottleTargetFill = (target.currentColorsList.Count + amount) / (float)k_bottleCapacity;
-
-        Vector3 targetPourPosition = new Vector3(target.bottleTransform.position.x + (pourHorizontalOffset * direction), target.bottleTransform.position.y + pourHeightOffset, bottleTransform.position.z);
-
-        if (selectTween != null && selectTween.IsActive())
-        {
-            selectTween.Kill();
-        }
+        Vector3 targetPourPosition =
+            new Vector3(
+                target.bottleTransform.position.x + (pourHorizontalOffset * direction),
+                target.bottleTransform.position.y + pourHeightOffset,
+                bottleTransform.position.z
+            );
 
         Sequence sequence = DOTween.Sequence();
 
-        // move source bottle above target bottle
         sequence.Append(
             bottleTransform.DOMove(targetPourPosition, moveDuration)
-                .SetEase(Ease.OutQuad)
         );
 
-        // rotate bottle
         sequence.Append(
-            bottleTransform
-            .DORotate(new Vector3(0, 0, angle), pourDuration)
-            .SetEase(Ease.OutQuad)
+            bottleTransform.DORotate(new Vector3(0, 0, angle), pourDuration)
         );
 
-        // increase multiplier
         sequence.Join(
             DOTween.To(
                 () => scaleAndRotationMultiplier,
                 x =>
                 {
                     scaleAndRotationMultiplier = x;
-                    UpdateShader();
+                    bottleMaterial.SetFloat(scaleAndRotationMultiplierID, x);
                 },
                 multiplierTarget,
                 pourDuration
             )
         );
 
-        // drain source bottle
         sequence.Append(
             DOTween.To(
                 () => currentFillAmount,
                 x =>
                 {
                     currentFillAmount = x;
-
-                    bottleRenderer.GetPropertyBlock(materialPropertyblock);
-                    materialPropertyblock.SetFloat(fillAmountID, currentFillAmount);
-                    bottleRenderer.SetPropertyBlock(materialPropertyblock);
+                    bottleMaterial.SetFloat(fillAmountID, x);
                 },
-                sourceBottleTargetFill,
+                sourceTargetFill,
                 waterFillAndDrainDuration
-            ).SetEase(Ease.InOutSine)
+            )
         );
 
-        // fill target bottle
         sequence.Join(
             DOTween.To(
                 () => target.currentFillAmount,
                 x =>
                 {
                     target.currentFillAmount = x;
-
-                    target.bottleRenderer.GetPropertyBlock(target.materialPropertyblock);
-                    target.materialPropertyblock.SetFloat(target.fillAmountID, target.currentFillAmount);
-                    target.bottleRenderer.SetPropertyBlock(target.materialPropertyblock);
+                    target.bottleMaterial.SetFloat(target.fillAmountID, x);
                 },
-                targetBottleTargetFill,
+                targetTargetFill,
                 waterFillAndDrainDuration
-            ).SetEase(Ease.InOutSine)
+            )
         );
 
-        // update shader colors after pour
         sequence.AppendCallback(() =>
         {
             for (int i = 0; i < amount; i++)
             {
                 currentColorsList.RemoveAt(currentColorsList.Count - 1);
-                target.currentColorsList.Add(topColorIndex);
+                target.currentColorsList.Add(topColor);
             }
 
             UpdateShader();
             target.UpdateShader();
         });
 
-        // move bottle back to orginal position
         sequence.Append(
-             bottleTransform.DOMove(originalPosition, moveDuration)
-                 .SetEase(Ease.InOutQuad)
+            bottleTransform.DOMove(originalPosition, moveDuration)
         );
 
-        // rotate bottle back
         sequence.Append(
-            bottleTransform
-            .DORotate(Vector3.zero, pourDuration)
-            .SetEase(Ease.InOutQuad)
+            bottleTransform.DORotate(Vector3.zero, pourDuration)
         );
 
         sequence.Join(
@@ -389,7 +311,7 @@ public class Bottle : MonoBehaviour
                 x =>
                 {
                     scaleAndRotationMultiplier = x;
-                    UpdateShader();
+                    bottleMaterial.SetFloat(scaleAndRotationMultiplierID, x);
                 },
                 1f,
                 pourDuration
@@ -402,7 +324,39 @@ public class Bottle : MonoBehaviour
             OnPourComplete?.Invoke(this, target, true);
         });
     }
-    private void FailPourAttempt(Bottle target)
+
+    void PrepareIncomingColor(int colorIndex, int amount)
+    {
+        Color color = palette.GetColor(colorIndex);
+        int startIndex = currentColorsList.Count;
+
+        for (int i = 0; i < amount; i++)
+        {
+            int index = startIndex + i;
+
+            if (index == 0) bottleMaterial.SetColor(color01ID, color);
+            else if (index == 1) bottleMaterial.SetColor(color02ID, color);
+            else if (index == 2) bottleMaterial.SetColor(color03ID, color);
+            else if (index == 3) bottleMaterial.SetColor(color04ID, color);
+        }
+    }
+    public Tween AnimateReceiveFill(int amount)
+    {
+        float targetFill = (currentColorsList.Count + amount) / (float)k_bottleCapacity;
+
+        return DOTween.To(
+            () => currentFillAmount,
+            x =>
+            {
+                currentFillAmount = x;
+                bottleMaterial.SetFloat(fillAmountID, currentFillAmount);
+            },
+            targetFill,
+            0.6f
+        ).SetEase(Ease.InOutSine);
+    }
+
+    void FailPourAttempt(Bottle target)
     {
         OnPourComplete?.Invoke(this, target, false);
         AnimateDeselect();
@@ -416,7 +370,7 @@ public class Bottle : MonoBehaviour
         selectTween = bottleTransform.DOLocalMoveY(
             originalLocalPosition.y + selectOffsetY,
             selectDuration
-        ).SetEase(Ease.OutQuad);
+        );
     }
 
     public void AnimateDeselect()
@@ -427,48 +381,7 @@ public class Bottle : MonoBehaviour
         selectTween = bottleTransform.DOLocalMoveY(
             originalLocalPosition.y,
             selectDuration
-        ).SetEase(Ease.OutQuad);
-    }
-
-    void PrepareIncomingColor(int colorIndex, int amount)
-    {
-        Color color = palette.GetColor(colorIndex);
-
-        bottleRenderer.GetPropertyBlock(materialPropertyblock);
-
-        int startIndex = currentColorsList.Count;
-
-        for (int i = 0; i < amount; i++)
-        {
-            int index = startIndex + i;
-
-            if (index == 0) materialPropertyblock.SetColor(color01ID, color);
-            else if (index == 1) materialPropertyblock.SetColor(color02ID, color);
-            else if (index == 2) materialPropertyblock.SetColor(color03ID, color);
-            else if (index == 3) materialPropertyblock.SetColor(color04ID, color);
-        }
-
-        bottleRenderer.SetPropertyBlock(materialPropertyblock);
-    }
-
-    public Tween AnimateReceiveFill(int amount)
-    {
-        float startFill = currentFillAmount;
-        float targetFill = (currentColorsList.Count + amount) / (float)k_bottleCapacity;
-
-        return DOTween.To(
-            () => currentFillAmount,
-            x =>
-            {
-                currentFillAmount = x;
-
-                bottleRenderer.GetPropertyBlock(materialPropertyblock);
-                materialPropertyblock.SetFloat(fillAmountID, currentFillAmount);
-                bottleRenderer.SetPropertyBlock(materialPropertyblock);
-            },
-            targetFill,
-            0.6f
-        ).SetEase(Ease.InOutSine);
+        );
     }
 
     float GetPourAngleFromAmount(int amount)
@@ -499,7 +412,7 @@ public class Bottle : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            if (i < currentColorsList.Count && currentColorsList[i] != null)
+            if (i < currentColorsList.Count)
                 colors[i] = currentColorsList[i].ToString();
             else
                 colors[i] = "Empty";
