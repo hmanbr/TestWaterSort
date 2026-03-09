@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2615374043104177922}
   - component: {fileID: 3016622273800259836}
   m_Layer: 0
-  m_Name: JUST WATER
+  m_Name: (Debug)JUST WATER
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

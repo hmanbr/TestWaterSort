@@ -331,7 +331,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 88fb2cff860d22745b2c7148464fe4e9, type: 2}
+  - {fileID: 2100000, guid: b3df829054bfe6a4ba85df643c3e105e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 2615374043104177922}
   - component: {fileID: 3016622273800259836}
   m_Layer: 0
-  m_Name: bruh
+  m_Name: (Debug)BottleSelfAssign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

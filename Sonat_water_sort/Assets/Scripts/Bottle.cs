@@ -85,7 +85,7 @@ public class Bottle : MonoBehaviour
 
     private void Start()
     {
-        //InitializeFromPalette(setColors); //for DEBUG, DELETE LATER
+        InitializeFromPalette(setColors); //for DEBUG, DELETE LATER
     }
 
     // Set bottle's color
