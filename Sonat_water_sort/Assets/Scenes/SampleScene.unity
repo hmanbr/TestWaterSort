@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!156049354 &45215127
 Grid:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &62165328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,10 +269,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenManager
   gameManager: {fileID: 1053565424}
   grid: {fileID: 1567269307}
-  bottlePrefab: {fileID: 7657622789198975532, guid: 753ee229581cb0b43bce81b2674d19b4, type: 3}
+  bottlePrefab: {fileID: 7657622789198975532, guid: f860d1238f5e1f245ae88fe89bd21abe, type: 3}
   columns: 4
   rows: 3
-  colorAmount: 3
+  colorAmount: 4
   palette: {fileID: 11400000, guid: 8a69ceba78b1eb9469b14d877242289a, type: 2}
 --- !u!4 &62165329
 Transform:
@@ -539,7 +539,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.98, y: 7.63, z: -10}
+  m_LocalPosition: {x: 7.9, y: 13.07, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -725,7 +725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53363cb4e7c1c364491fbd1564e02f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  grid: {fileID: 45215127}
+  grid: {fileID: 1567269307}
 --- !u!4 &1053565425
 Transform:
   m_ObjectHideFlags: 0

@@ -2024,7 +2024,7 @@
     "m_Hidden": false,
     "m_PerRendererData": false,
     "m_customAttributes": [],
-    "m_Value": 0.25999999046325686,
+    "m_Value": 0.30000001192092898,
     "m_FloatType": 0,
     "m_LiteralFloatMode": false,
     "m_RangeValues": {
@@ -2750,8 +2750,8 @@
     "m_ObjectId": "3f0a30c0d7ff4a40861d3a74e70fd411",
     "m_Title": "curveOffset",
     "m_Position": {
-        "x": -2271.999755859375,
-        "y": -500.6666564941406
+        "x": -2272.0,
+        "y": -500.666748046875
     }
 }
 
@@ -2889,8 +2889,8 @@
     "m_ObjectId": "4379024d259940c7bb6bc1f7ac46d69b",
     "m_Title": "layerCoordinate",
     "m_Position": {
-        "x": -428.000244140625,
-        "y": -329.9999694824219
+        "x": -428.0,
+        "y": -330.0
     }
 }
 
@@ -3709,7 +3709,7 @@
     "m_ObjectId": "7840eb1be33b4ee28730716188f56752",
     "m_Title": "liquidColor",
     "m_Position": {
-        "x": 2032.6661376953125,
+        "x": 2032.6666259765625,
         "y": -67.3333740234375
     }
 }
@@ -4176,8 +4176,8 @@
     "m_ObjectId": "872fd47e6f824dec91baab4bb28cbe47",
     "m_Title": "curvedHeightNormalized",
     "m_Position": {
-        "x": -759.333251953125,
-        "y": -321.9999694824219
+        "x": -759.3333740234375,
+        "y": -322.0
     }
 }
 
@@ -4336,7 +4336,7 @@
     "m_Title": "selectedColor",
     "m_Position": {
         "x": 1112.0,
-        "y": -745.3333129882813
+        "y": -745.3333740234375
     }
 }
 
@@ -6868,8 +6868,8 @@
     "m_ObjectId": "f44bca19afcb453d9b34ed2b7ad4bddb",
     "m_Title": "layerIndex ",
     "m_Position": {
-        "x": 130.66650390625,
-        "y": -345.3333435058594
+        "x": 130.6666259765625,
+        "y": -345.3333740234375
     }
 }
 
@@ -6904,8 +6904,8 @@
     "m_ObjectId": "f5689c642d2d49d2806bf2f04790bd27",
     "m_Title": "Layer Masks",
     "m_Position": {
-        "x": 621.9998168945313,
-        "y": -653.3333129882813
+        "x": 622.0,
+        "y": -653.3333740234375
     }
 }
 
@@ -7015,7 +7015,7 @@
     "m_ObjectId": "fb99e884e5c4437dacf54a8a155eb39a",
     "m_Title": "heightNormalized",
     "m_Position": {
-        "x": -2493.999755859375,
+        "x": -2494.0,
         "y": -15.3333740234375
     }
 }

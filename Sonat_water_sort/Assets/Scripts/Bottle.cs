@@ -77,7 +77,7 @@ public class Bottle : MonoBehaviour
 
     void Start()
     {
-        InitializeFromPalette(setColors);
+        //InitializeFromPalette(setColors);
     }
 
     public void InitializeFromPalette(int[] setColors)

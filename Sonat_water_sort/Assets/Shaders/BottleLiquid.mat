@@ -52,7 +52,7 @@ Material:
     - _HeightMin: -3
     - _HeightRange: 6
     - _LayerCount: 4
-    - _LayerCurveStrength: 0.26
+    - _LayerCurveStrength: 0.3
     - _QueueControl: 0
     - _QueueOffset: 50
     - _ScaleAndRotationMultiplier: 1
